@@ -1,5 +1,7 @@
 package nmic_message_client
 
+import "time"
+
 type MonitorMessage struct {
 	MessageType string         `json:"type"`       // topic: RT.DPC.STATION.DI
 	Name        string         `json:"name"`       // 消息名称: GRAPES_GFS
@@ -19,6 +21,25 @@ type ProdFileFields struct {
 	DataFlow         string `json:"DATA_FLOW"`        // 业务流程标识：BDMAIN（大数据平台主流程）
 	ProdType         string `json:"type"`             // 产品类型，GRIB2数据：prod_grib2
 	AbsoluteDataName string `json:"absoluteDataName"` // 文件绝对路径
-	StartTime        string `json:"start_time"`       // 起报时间
-	ForecastTime     string `json:"forecast_time"`    // 时效
+	StartTime        string `json:"start_time"`       // 起报时间,YYYYMMDDHH
+	ForecastTime     string `json:"forecast_time"`    // 时效, FFF
+}
+
+func makeTimestamp() int64 {
+	return time.Now().UnixNano() / int64(time.Millisecond)
+}
+
+func CreateProdFileMessage(
+	modelInfo ModelInfo,
+	productionInfo ProductionInfo,
+	flow Flow) MonitorMessage {
+	message := MonitorMessage{
+		OccurTime: makeTimestamp(),
+	}
+
+	modelInfo.FillMessage(&message)
+	productionInfo.FillMessage(&message)
+	flow.FillMessage(&message)
+
+	return message
 }
