@@ -9,7 +9,7 @@ type ModelInfo struct {
 func (modelInfo *ModelInfo) FillMessage(m *MonitorMessage) {
 	m.Name = modelInfo.ModelName
 	m.Fields.DataType = modelInfo.ModelDataTypeCode
-	m.Fields.DataType = modelInfo.ModelDataType
+	m.Fields.DataType1 = modelInfo.ModelDataType
 	m.Fields.Receive = modelInfo.ModelName
 }
 
